@@ -2,7 +2,13 @@
 
 import { MdCall } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
-import { BiLogoInstagramAlt, BiSolidMessageDetail } from "react-icons/bi";
+import {
+  BiLogoDiscordAlt,
+  BiLogoInstagramAlt,
+  BiLogoPaypal,
+  BiLogoPinterest,
+  BiSolidMessageDetail,
+} from "react-icons/bi";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiWhatsappFill } from "react-icons/ri";
 
@@ -10,8 +16,18 @@ import { RiWhatsappFill } from "react-icons/ri";
 import { RiYoutubeFill } from "react-icons/ri";
 import { BsDiscord } from "react-icons/bs";
 import { ImSoundcloud } from "react-icons/im";
-import { BiLogoSnapchat, BiLogoSpotify, BiLogoTelegram } from "react-icons/bi";
-import { FaFacebookF } from "react-icons/fa";
+import {
+  BiLogoSnapchat,
+  BiLogoSpotify,
+  BiLogoTelegram,
+  BiLogoTiktok,
+} from "react-icons/bi";
+import { FaFacebookF, FaTwitch } from "react-icons/fa";
+import { TiSocialTumbler } from "react-icons/ti";
+import { BiLogoTwitter, BiLogoLinkedin } from "react-icons/bi";
+import { SiApplemusic, SiCashapp } from "react-icons/Si";
+import { AiOutlineLink } from "react-icons/ai";
+import { LuLink2 } from "react-icons/lu";
 
 // import instagram from "./socialLink/instagram.png";
 // import facebook from "./socialLink/facebook.png";
@@ -237,44 +253,45 @@ export const socialIcons = [
 //   },
 // ];
 
-export let returnIcons = (name, size) => {
+export let returnIcons = (name, size, color) => {
   console.log(name);
-  if (name === "Call") {
-    return <MdCall style={{ color: "white", fontSize: `${size}px` }} />;
-  } else if (name === "Message") {
-    return (
-      <BiSolidMessageDetail style={{ color: "white", fontSize: `${size}px` }} />
-    );
+  if (name === "Phone") {
+    return <MdCall style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Text") {
+    return <BiSolidMessageDetail style={{ color, fontSize: `${size}px` }} />;
   } else if (name === "Whatsapp") {
-    return <RiWhatsappFill style={{ color: "white", fontSize: `${size}px` }} />;
+    return <RiWhatsappFill style={{ color, fontSize: `${size}px` }} />;
   } else if (name === "Email") {
-    return <MdEmail style={{ color: "white", fontSize: `${size}px` }} />;
+    return <MdEmail style={{ color, fontSize: `${size}px` }} />;
   } else if (name === "Snapchat") {
-    return <BiLogoSnapchat style={{ color: "white", fontSize: `${size}px` }} />;
+    return <BiLogoSnapchat style={{ color, fontSize: `${size}px` }} />;
   } else if (name === "Facebook") {
-    return <FaFacebookF style={{ color: "white", fontSize: `${size}px` }} />;
+    return <FaFacebookF style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Twitter") {
+    return <BiLogoTwitter style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Pinterest") {
+    return <BiLogoPinterest style={{ color, fontSize: `${size}px` }} />;
   } else if (name === "Instagram") {
-    return (
-      <BiLogoInstagramAlt style={{ color: "white", fontSize: `${size}px` }} />
-    );
+    return <BiLogoInstagramAlt style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Linkedin") {
+    return <BiLogoLinkedin style={{ color, fontSize: `${size}px` }} />;
   }
   // else if (name === "Twitter") {
   //   return twitter;
   // }
-  // else if (name === "Twitch") {
-  //   return twitch;
-  // }
-  else if (name === "Youtube") {
-    return <RiYoutubeFill style={{ color: "white", fontSize: "50px" }} />;
+  else if (name === "Twitch") {
+    return <FaTwitch style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Youtube") {
+    return <RiYoutubeFill style={{ color, fontSize: `${size}px` }} />;
   } else if (name === "Telegram") {
-    return <BiLogoTelegram style={{ color: "white", fontSize: "50px" }} />;
+    return <BiLogoTelegram style={{ color, fontSize: `${size}px` }} />;
   }
   // else if (name === "Pinterest") {
   //   return pinterest;
   // }
-  // else if (name === "Tiktok") {
-  //   return tiktok;
-  // }
+  else if (name === "TikTok") {
+    return <BiLogoTiktok style={{ color, fontSize: `${size}px` }} />;
+  }
   // else if (name === "Linkedin") {
   //   return linkedin;
   // }
@@ -282,33 +299,34 @@ export let returnIcons = (name, size) => {
   //   return reddit;
   // }
   else if (name === "Discord") {
-    return <BsDiscord style={{ color: "white", fontSize: "50px" }} />;
-  }
-  // else if (name === "Tumblr") {
-  //   return tumblr;
-  // }
-  else if (name === "Spotify") {
-    return <BiLogoSpotify style={{ color: "white", fontSize: "50px" }} />;
+    return <BsDiscord style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Tumblr") {
+    return <TiSocialTumbler style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Spotify") {
+    return <BiLogoSpotify style={{ color, fontSize: `${size}px` }} />;
   }
   // else if (name === "Apple Music") {
   //   return applemusic;
   // }
-  else if (name === "SoundCloud") {
-    return <ImSoundcloud style={{ color: "white", fontSize: "50px" }} />;
+  else if (name === "Sound Cloud") {
+    return <ImSoundcloud style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Cash App") {
+    return <SiCashapp style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Paypal") {
+    return <BiLogoPaypal style={{ color, fontSize: `${size}px` }} />;
   }
-  // else if (name === "Cash App") {
-  //   return applemusic;
-  // } else if (name === "PayPal") {
-  //   return paypal;
-  // } else if (name === "Calendly") {
+  // else if (name === "Calendly") {
   //   return calendly;
-  // } else if (name === "Website") {
-  //   return website;
-  // } else if (name === "Custom") {
-  //   return custom;
-  // } else if (name === "CashApp") {
-  //   return cashapp;
-  // } else if (name === "AppleMusic") {
-  //   return applemusic;
   // }
+  else if (name === "Website") {
+    return <AiOutlineLink style={{ color, fontSize: `${size}px` }} />;
+  } else if (name === "Custom Link") {
+    return <LuLink2 style={{ color, fontSize: `${size}px` }} />;
+  }
+  //  else if (name === "CashApp") {
+  //   return cashapp;
+  // }
+  else if (name === "Apple Music") {
+    return <SiApplemusic style={{ color, fontSize: `${size}px` }} />;
+  }
 };

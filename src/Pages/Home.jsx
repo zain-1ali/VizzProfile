@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { db } from "../Firebase";
-import { onValue, ref, update } from "firebase/database";
 import { returnIcons } from "../assets/ReturnSocialIcons";
 import Loader from "../assets/components/Loader";
-import VCard from "vcard-creator";
 import NotFound from "./NotFound";
 import LeadformModal from "../assets/components/LeadformModal";
 import ShareCardModal from "../assets/components/ShareCardModal";
@@ -25,10 +22,8 @@ const Home = () => {
 
   // ------------------getting Data--------------------
 
-  let [usersdata, setusersdata] = useState(null);
-
   let [modal, setModal] = useState(0);
-
+  let [notfound, setnotfound] = useState(false);
   let handleModal = () => {
     setModal(!modal);
   };
@@ -42,16 +37,18 @@ const Home = () => {
             `https://vizzapis.link2avicenna.com/api/getEmpLiveData/${userid}`
           )
           .then((resp) => {
-            console.log("test", resp?.data?.data);
+            console.log("test", resp);
             setprofileData(resp?.data?.data);
             setModal(resp?.data?.data?.leadMode);
             setloading(false);
-            // console.log(resp?.response?.data?.message);
+
+            console.log(resp?.data);
             // toast.success(resp?.data?.message);
           });
 
         // console.log(res);
       } catch (error) {
+        setnotfound(true);
         // console.log(error.response.data.message);
         // toast.error(error?.response?.data?.message);
       }
@@ -59,7 +56,7 @@ const Home = () => {
     getTheUser();
   }, []);
 
-  let [notfound, setnotfound] = useState(false);
+  // console.log(profileData?.data);
 
   let [shareModal, setShareModal] = useState(false);
   let handleShareModal = () => {
@@ -72,7 +69,27 @@ const Home = () => {
   console.log(userdata?.Analytics?.updatedAt);
 
   // ----------------------------------------->Analytics<-------------------------------------
+  let updateAnalytics = async (analyticsData) => {
+    try {
+      await axios
+        .post(`https://vizzapis.link2avicenna.com/api/updateAnalytics`, {
+          userId: userid,
+          ...analyticsData,
+        })
+        .then((resp) => {
+          console.log(resp);
+        });
 
+      // console.log(res);
+    } catch (error) {
+      // console.log(error.response.data.message);
+      // toast.error(error?.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    updateAnalytics({ action: "view" });
+  }, []);
   // ----------------------------------------->Link Analytics<-------------------------------------
 
   // -----------------------------------------hex to rgba for bg color-------------------------------------
@@ -134,6 +151,9 @@ const Home = () => {
     });
     return theLink?.value;
   };
+  // console.log(profileData?.links);
+  let [QrSection, setQrSection] = useState(false);
+  let [showContact, setshowContact] = useState(true);
   return (
     <>
       {loading ? (
@@ -152,6 +172,7 @@ const Home = () => {
                 leadFields={profileData?.leadFields}
                 color={profileData?.color}
                 userid={userid}
+                updateAnalytics={updateAnalytics}
                 // userdata={userdata}
               />
 
@@ -165,6 +186,13 @@ const Home = () => {
                   )
                 }
                 color={profileData?.color}
+                btnColor={profileData?.btnColor}
+                textColor={profileData?.textColor}
+                linkBgColor={profileData?.linkBgColor}
+                linkColor={profileData?.linkColor}
+                showContact={showContact}
+                setshowContact={setshowContact}
+                qrLogoUrl={profileData?.qrLogoUrl}
               />
 
               <div
@@ -203,34 +231,68 @@ const Home = () => {
                 <div className="w-[100%] flex justify-center mt-[5px]">
                   <div className="w-[90%]">
                     <h2
-                      className="font-[600] text-[25px] "
-                      style={{ color: profileData?.color, fontFamily: "Inter" }}
+                      className="font-[600] text-[25px]"
+                      style={{
+                        color: profileData?.textColor,
+                        fontFamily: "Inter",
+                      }}
                     >
                       {profileData?.name}
                     </h2>
                     <div className="w-[100%] flex justify-between">
-                      <div
+                      {/* <div
                         className=" w-[4px] h-[135px]"
                         style={{ backgroundColor: profileData?.color }}
-                      ></div>
-                      <div className="w-[97%]">
+                      ></div> */}
+                      <div
+                        className="w-[97%] pl-2 h-max"
+                        style={{
+                          borderLeft:
+                            profileData?.designation ||
+                            profileData?.organizationName ||
+                            profileData?.bio
+                              ? `4px solid ${profileData?.color}`
+                              : null,
+                        }}
+                      >
                         <h2
-                          style={{ fontFamily: "Inter" }}
+                          style={{
+                            fontFamily: "Inter",
+                            color: profileData?.textColor,
+                          }}
                           className="font-[500] text-[18px]"
                         >
-                          React js developer
+                          {profileData?.designation}
                         </h2>
                         <p
-                          style={{ fontFamily: "Inter" }}
+                          style={{
+                            fontFamily: "Inter",
+                            color: profileData?.textColor,
+                          }}
                           className="font-[400]  text-[#cccccc] text-[18px]"
                         >
-                          Avicenna Enterprises Solutions
+                          {/* Avicenna Enterprises Solutions */}
+                          {profileData?.organizationName}
                         </p>
                         <p
-                          style={{ fontFamily: "Inter" }}
+                          style={{
+                            fontFamily: "Inter",
+                            color: profileData?.textColor,
+                          }}
                           className="font-[300]  text-[#cccccc] text-[14px] mt-[2px]"
                         >
-                          {returnSplitString(profileData?.bio)}
+                          {profileData?.organizationPhone}
+                          {/* {returnSplitString(profileData?.bio)} */}
+                        </p>
+                        <p
+                          style={{
+                            fontFamily: "Inter",
+                            color: profileData?.textColor,
+                          }}
+                          className="font-[300]  text-[#cccccc] text-[14px] mt-[2px]"
+                        >
+                          {profileData?.bio}
+                          {/* {returnSplitString(profileData?.bio)} */}
                         </p>
                       </div>
                     </div>
@@ -239,15 +301,14 @@ const Home = () => {
                 <div className="w-[100%] flex justify-evenly mt-3">
                   <button
                     style={{
-                      backgroundColor: profileData?.color,
+                      backgroundColor: profileData?.btnColor,
                       fontFamily: "Inter",
+                      color: profileData?.textColor,
                     }}
                     className="w-[50%] h-[50px] rounded-full  flex justify-center items-center text-white font-[700] "
-                    onClick={() =>
-                      window.open(
-                        `https://vizzapis.link2avicenna.com/api/downloadVcf/${userid}`
-                      )
-                    }
+                    onClick={() => {
+                      setshowContact(true), handleShareModal();
+                    }}
                   >
                     <IoMdDownload
                       style={{
@@ -259,10 +320,21 @@ const Home = () => {
                   </button>
                   <button
                     className="w-[35%] h-[50px] rounded-full bg-black flex justify-center items-center text-white font-[700]"
-                    onClick={() => handleShareModal()}
+                    onClick={() => {
+                      setshowContact(false), handleShareModal();
+                    }}
+                    style={{
+                      backgroundColor: profileData?.btnColor,
+                      fontFamily: "Inter",
+                      color: profileData?.textColor,
+                    }}
                   >
                     <FaShareSquare
-                      style={{ marginRight: "6px", fontSize: "16px" }}
+                      style={{
+                        marginRight: "6px",
+                        fontSize: "16px",
+                        // color: profileData?.textColor,
+                      }}
                     />{" "}
                     Share
                   </button>
@@ -278,35 +350,61 @@ const Home = () => {
                           <div className="h-[70px] w-[20%] flex flex-col justify-center items-center ">
                             <div
                               className="h-[45px] w-[45px] rounded-full  flex justify-center items-center text-xl"
-                              style={{ backgroundColor: profileData?.color }}
-                              onClick={() => window.open(elm?.value)}
+                              style={{
+                                backgroundColor: profileData?.linkBgColor,
+                              }}
+                              onClick={() => {
+                                window.open(elm?.value),
+                                  updateAnalytics({
+                                    action: "click",
+                                    linkId: elm?.linkId,
+                                  });
+                              }}
                             >
-                              {returnIcons(elm?.name)}
+                              {returnIcons(
+                                elm?.name,
+                                "size",
+                                profileData?.linkColor
+                              )}
                             </div>
-                            <p className="mt-1 text-[10px]">{elm?.name}</p>
+                            <p
+                              className="mt-1 text-[10px]"
+                              style={{ color: profileData?.textColor }}
+                            >
+                              {elm?.name}
+                            </p>
                           </div>
                         );
                       })}
                     </div>
                   </div>
+                  {profileData.poweredVizz === 1 && (
+                    <>
+                      <p
+                        // style={{ color }}
 
-                  <p
-                    // style={{ color }}
-
-                    style={{ color: profileData?.color, fontFamily: "Inter" }}
-                    className="font-[600] text-[12px] mt-3"
-                  >
-                    Powered by{" "}
-                    <span className="font-[700] text-[14px] text-black">
-                      VIZZ
-                    </span>
-                  </p>
-                  <div
-                    style={{ color: profileData?.color, fontFamily: "Inter" }}
-                    className="font-[400] text-[10px] "
-                  >
-                    www.vizz.store
-                  </div>
+                        style={{
+                          color: profileData?.textColor,
+                          fontFamily: "Inter",
+                        }}
+                        className="font-[600] text-[12px] mt-3"
+                      >
+                        Powered by{" "}
+                        <span className="font-[700] text-[14px] text-black">
+                          VIZZ
+                        </span>
+                      </p>
+                      <div
+                        style={{
+                          color: profileData?.textColor,
+                          fontFamily: "Inter",
+                        }}
+                        className="font-[400] text-[10px] "
+                      >
+                        www.vizz.store
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

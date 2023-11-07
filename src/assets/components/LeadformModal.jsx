@@ -8,14 +8,21 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { db, storage } from "../../Firebase";
 import axios from "axios";
 
-const LeadformModal = ({ modal, handleModal, leadFields, color, userid }) => {
+const LeadformModal = ({
+  modal,
+  handleModal,
+  leadFields,
+  color,
+  userid,
+  updateAnalytics,
+}) => {
   const style2 = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 330,
-    height: 590,
+    minHeight: 250,
     bgcolor: "white",
     // border: '2px solid #000',
     boxShadow: 24,
@@ -104,6 +111,7 @@ const LeadformModal = ({ modal, handleModal, leadFields, color, userid }) => {
             company: "",
             message: "",
           });
+          toast.success("Submited successfuly");
           console.log(resp);
           // setprofileData(resp?.data?.data);
           // setloading(false);
@@ -258,7 +266,12 @@ const LeadformModal = ({ modal, handleModal, leadFields, color, userid }) => {
               <div className="w-[100%] flex justify-center mt-[20px]">
                 <div
                   class="w-[45%] border rounded-3xl  h-[46px]  flex justify-center items-center text-white cursor-pointer mr-2"
-                  onClick={() => addData()}
+                  onClick={() => {
+                    addData(),
+                      updateAnalytics({
+                        action: "contact",
+                      });
+                  }}
                   style={{ backgroundColor: color }}
                 >
                   Submit
@@ -272,8 +285,9 @@ const LeadformModal = ({ modal, handleModal, leadFields, color, userid }) => {
                 </div>
               </div>
             </div>
+            <br />
 
-            <ToastContainer position="top-center" autoClose={2000} />
+            {/* <ToastContainer position="top-center" autoClose={2000} /> */}
           </div>
         </Box>
       </Modal>

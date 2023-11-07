@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 import Home from "./Pages/Home";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -13,6 +14,12 @@ function App() {
           <Route path="/:userid" element={<Home />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        theme="colored"
+        hideProgressBar
+      />
     </div>
   );
 }
