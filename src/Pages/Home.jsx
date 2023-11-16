@@ -186,7 +186,7 @@ const Home = () => {
                   )
                 }
                 color={profileData?.color}
-                btnColor={profileData?.btnColor}
+                btnColor={profileData?.saveBtnColor}
                 textColor={profileData?.textColor}
                 linkBgColor={profileData?.linkBgColor}
                 linkColor={profileData?.linkColor}
@@ -207,10 +207,10 @@ const Home = () => {
                         : `https://placehold.co/390x185`
                     }
                     alt="background"
-                    className="h-[185px] w-[100%] "
+                    className="h-[200px] w-[100%] object-cover shadow-2xl"
                   />
 
-                  <div className="h-[130px] w-[100%] absolute top-[110px] flex">
+                  <div className="h-[130px] w-[100%] absolute top-[125px] flex">
                     <div className="h-[100%] w-[130px] relative ml-6">
                       <img
                         src={
@@ -219,7 +219,7 @@ const Home = () => {
                             : `https://placehold.co/130x130`
                         }
                         alt="profile"
-                        className="h-[130px] w-[130px] rounded-full"
+                        className="h-[130px] w-[130px] rounded-full shadow-2xl"
                       />
                     </div>
                   </div>
@@ -228,7 +228,7 @@ const Home = () => {
                     <h2 className="text-2xl font-medium">{userdata?.name}</h2>
                   </div> */}
                 </div>
-                <div className="w-[100%] flex justify-center mt-[5px]">
+                <div className="w-[100%] flex justify-center mt-[25px]">
                   <div className="w-[90%]">
                     <h2
                       className="font-[600] text-[25px]"
@@ -301,11 +301,11 @@ const Home = () => {
                 <div className="w-[100%] flex justify-evenly mt-3">
                   <button
                     style={{
-                      backgroundColor: profileData?.btnColor,
+                      backgroundColor: profileData?.saveBtnColor,
                       fontFamily: "Inter",
                       color: profileData?.textColor,
                     }}
-                    className="w-[50%] h-[50px] rounded-full  flex justify-center items-center text-white font-[700] "
+                    className="w-[50%] h-[50px] rounded-full  flex justify-center items-center text-white font-[700] shadow-xl"
                     onClick={() => {
                       setshowContact(true), handleShareModal();
                     }}
@@ -319,12 +319,12 @@ const Home = () => {
                     Save Contact
                   </button>
                   <button
-                    className="w-[35%] h-[50px] rounded-full bg-black flex justify-center items-center text-white font-[700]"
+                    className="w-[35%] h-[50px] rounded-full bg-black flex justify-center items-center text-white font-[700] shadow-xl"
                     onClick={() => {
                       setshowContact(false), handleShareModal();
                     }}
                     style={{
-                      backgroundColor: profileData?.btnColor,
+                      backgroundColor: profileData?.shareBtnColor,
                       fontFamily: "Inter",
                       color: profileData?.textColor,
                     }}
@@ -340,7 +340,7 @@ const Home = () => {
                   </button>
                 </div>
 
-                <div className="w-[100%] flex flex-col items-center mt-3">
+                <div className="w-[100%] flex flex-col items-center mt-4">
                   {/* absolute bottom-[2%] */}
                   {/* <div className="w-[90%] border"></div> */}
                   <div className="max-w-[90%] w-[100%]  border-t border-b h-[140px] flex justify-center items-center">
