@@ -13,12 +13,13 @@ import axios from "axios";
 
 const Home = () => {
   let { userid } = useParams();
+  let params = useParams();
   let [userdata, setuserdata] = useState(null);
   let [sociallink, setsociallink] = useState([]);
   let [loading, setloading] = useState(false);
   let [profileData, setprofileData] = useState({});
-
-  // console.log(sociallink);
+  let [cancel, setcancel] = useState(false);
+  let isOrg = window.location.pathname?.includes("isOrg");
 
   // ------------------getting Data--------------------
 
@@ -33,9 +34,7 @@ const Home = () => {
       setloading(true);
       try {
         await axios
-          .get(
-            `https://vizzapis.link2avicenna.com/api/getEmpLiveData/${userid}`
-          )
+          .get(`https://apis.b2b-vizz.sk/api/getEmpLiveData/${userid}`)
           .then((resp) => {
             console.log("test", resp);
             setprofileData(resp?.data?.data);
@@ -53,7 +52,34 @@ const Home = () => {
         // toast.error(error?.response?.data?.message);
       }
     };
-    getTheUser();
+    let getTheOrg = async () => {
+      setloading(true);
+      try {
+        await axios
+          .get(`https://apis.b2b-vizz.sk/api/getOrganization/${userid}`)
+          .then((resp) => {
+            console.log("test", resp);
+            setprofileData(resp?.data?.data);
+            // setModal(resp?.data?.data?.leadMode);
+            setloading(false);
+
+            console.log(resp?.data);
+            // toast.success(resp?.data?.message);
+          });
+
+        // console.log(res);
+      } catch (error) {
+        setnotfound(true);
+        // console.log(error.response.data.message);
+        // toast.error(error?.response?.data?.message);
+      }
+    };
+
+    if (isOrg) {
+      getTheOrg();
+    } else {
+      getTheUser();
+    }
   }, []);
 
   // console.log(profileData?.data);
@@ -72,7 +98,7 @@ const Home = () => {
   let updateAnalytics = async (analyticsData) => {
     try {
       await axios
-        .post(`https://vizzapis.link2avicenna.com/api/updateAnalytics`, {
+        .post(`https://apis.b2b-vizz.sk/api/updateAnalytics`, {
           userId: userid,
           ...analyticsData,
         })
@@ -129,7 +155,7 @@ const Home = () => {
   let downLoadVcf = async () => {
     try {
       await axios
-        .get(`https://vizzapis.link2avicenna.com/api/downloadVcf/${userid}`)
+        .get(`https://apis.b2b-vizz.sk/api/downloadVcf/${userid}`)
         .then((resp) => {
           console.log(resp);
           // setprofileData(resp?.data?.data);
@@ -154,6 +180,19 @@ const Home = () => {
   // console.log(profileData?.links);
   let [QrSection, setQrSection] = useState(false);
   let [showContact, setshowContact] = useState(true);
+
+  let returnProfileLogo = () => {
+    if (isOrg) {
+      return profileData?.logoUrl
+        ? profileData?.logoUrl
+        : `https://placehold.co/130x130`;
+    } else {
+      return profileData?.profileUrl
+        ? profileData?.profileUrl
+        : `https://placehold.co/130x130`;
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -182,7 +221,7 @@ const Home = () => {
                 handleShareModal={handleShareModal}
                 downLoadVcf={() =>
                   window.open(
-                    `https://vizzapis.link2avicenna.com/api/downloadVcf/${userid}`
+                    `https://apis.b2b-vizz.sk/api/downloadVcf/${userid}`
                   )
                 }
                 color={profileData?.color}
@@ -213,11 +252,7 @@ const Home = () => {
                   <div className="h-[130px] w-[100%] absolute top-[125px] flex">
                     <div className="h-[100%] w-[130px] relative ml-6">
                       <img
-                        src={
-                          profileData?.profileUrl
-                            ? profileData?.profileUrl
-                            : `https://placehold.co/130x130`
-                        }
+                        src={returnProfileLogo()}
                         alt="profile"
                         className="h-[130px] w-[130px] rounded-full shadow-2xl"
                       />
@@ -298,48 +333,49 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-[100%] flex justify-evenly mt-3">
-                  <button
-                    style={{
-                      backgroundColor: profileData?.saveBtnColor,
-                      fontFamily: "Inter",
-                      color: profileData?.textColor,
-                    }}
-                    className="w-[50%] h-[50px] rounded-full  flex justify-center items-center text-white font-[700] shadow-xl"
-                    onClick={() => {
-                      setshowContact(true), handleShareModal();
-                    }}
-                  >
-                    <IoMdDownload
+                {!isOrg && (
+                  <div className="w-[100%] flex justify-evenly mt-3">
+                    <button
                       style={{
-                        marginRight: "6px",
-                        fontSize: "18px",
+                        backgroundColor: profileData?.saveBtnColor,
+                        fontFamily: "Inter",
+                        color: profileData?.textColor,
                       }}
-                    />
-                    Save Contact
-                  </button>
-                  <button
-                    className="w-[35%] h-[50px] rounded-full bg-black flex justify-center items-center text-white font-[700] shadow-xl"
-                    onClick={() => {
-                      setshowContact(false), handleShareModal();
-                    }}
-                    style={{
-                      backgroundColor: profileData?.shareBtnColor,
-                      fontFamily: "Inter",
-                      color: profileData?.textColor,
-                    }}
-                  >
-                    <FaShareSquare
+                      className="w-[50%] h-[50px] rounded-full  flex justify-center items-center text-white font-[700] shadow-xl"
+                      onClick={() => {
+                        setshowContact(true), handleShareModal();
+                      }}
+                    >
+                      <IoMdDownload
+                        style={{
+                          marginRight: "6px",
+                          fontSize: "18px",
+                        }}
+                      />
+                      Save Contact
+                    </button>
+                    <button
+                      className="w-[35%] h-[50px] rounded-full bg-black flex justify-center items-center text-white font-[700] shadow-xl"
+                      onClick={() => {
+                        setshowContact(false), handleShareModal();
+                      }}
                       style={{
-                        marginRight: "6px",
-                        fontSize: "16px",
-                        // color: profileData?.textColor,
+                        backgroundColor: profileData?.shareBtnColor,
+                        fontFamily: "Inter",
+                        color: profileData?.textColor,
                       }}
-                    />{" "}
-                    Share
-                  </button>
-                </div>
-
+                    >
+                      <FaShareSquare
+                        style={{
+                          marginRight: "6px",
+                          fontSize: "16px",
+                          // color: profileData?.textColor,
+                        }}
+                      />{" "}
+                      Share
+                    </button>
+                  </div>
+                )}
                 <div className="w-[100%] flex flex-col items-center mt-4">
                   {/* absolute bottom-[2%] */}
                   {/* <div className="w-[90%] border"></div> */}

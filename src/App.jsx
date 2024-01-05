@@ -11,7 +11,12 @@ function App() {
     >
       <BrowserRouter>
         <Routes>
-          <Route path="/:userid" element={<Home />} />
+          {/* <Route path="/:userid" element={<Home />} /> */}
+
+          <Route path="/profile">
+            <Route path=":userid" element={<Home />} />
+            <Route path="isOrg/:userid" element={<Home />} />
+          </Route>
         </Routes>
       </BrowserRouter>
       <ToastContainer

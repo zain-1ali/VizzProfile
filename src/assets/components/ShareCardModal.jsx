@@ -36,7 +36,6 @@ const ShareCardModal = ({
   const style2 = {
     position: "absolute",
     top: "72%",
-
     left: "50%",
     transform: "translate(-50%, -50%)",
     maxWidth: 420,
@@ -47,7 +46,6 @@ const ShareCardModal = ({
     // boxShadow: 24,
     border: "none",
     outline: "none",
-
     // p: "32px",
   };
 
